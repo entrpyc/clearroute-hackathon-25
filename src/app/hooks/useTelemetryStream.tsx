@@ -20,7 +20,6 @@ const useTelemetryStream = () => {
   }, []);
 
   return {
-    snapIndex,
     snapshot,
   };
 };
