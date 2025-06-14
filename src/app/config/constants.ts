@@ -1,5 +1,6 @@
 export const API_ROUTES = {
-  TELEMETRY: '/api/telemetry'
+  TELEMETRY: '/api/telemetry',
+  TELEMETRY_STREAM: '/api/stream',
 }
 
 export enum TelemetryKeys {

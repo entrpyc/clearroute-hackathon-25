@@ -8,7 +8,7 @@ export default function PerformanceEngineerPage() {
     try {
       const res = await fetch(API_ROUTES.TELEMETRY);
       const data = await res.json();
-      
+      console.log(data)
       console.log("ERS Battery Temp:", data[0][TelemetryKeys.ERS_BATTERY_TEMP]);
     } catch (error) {
       console.error("Failed to fetch telemetry:", error);
