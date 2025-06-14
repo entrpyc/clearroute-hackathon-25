@@ -3,10 +3,10 @@
 import { TelemetryKeys } from "@/types/telemetry";
 import { useEffect } from "react";
 
-export default function AnalyticsPage() {
+export default function PerformanceEngineerPage() {
 
   const fetchAnalytics = async() => {
-    const res = await fetch('/api/analytics');
+    const res = await fetch('/api/telemetry');
     const data = await res.json();
 
     console.log(data)
