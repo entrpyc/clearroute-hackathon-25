@@ -1,24 +1,29 @@
-'use client'
+'use client';
 
-import { API_ROUTES, TelemetryKeys } from "@/app/config/constants";
+import { API_ROUTES, TELEMETRY_FETCH_INTERVAL, TelemetryKeys } from "@/app/config/constants";
 import { useEffect } from "react";
 
 export default function PerformanceEngineerPage() {
-
-  const fetchAnalytics = async() => {
-    const res = await fetch(API_ROUTES.TELEMETRY);
-    const data = await res.json();
-
-    console.log(data)
-    console.log(data[0][TelemetryKeys.ERS_BATTERY_TEMP])
-    return data;
-  }
+  const fetchAnalytics = async () => {
+    try {
+      const res = await fetch(API_ROUTES.TELEMETRY);
+      const data = await res.json();
+      
+      console.log("ERS Battery Temp:", data[0][TelemetryKeys.ERS_BATTERY_TEMP]);
+    } catch (error) {
+      console.error("Failed to fetch telemetry:", error);
+    }
+  };
 
   useEffect(() => {
-    fetchAnalytics();
-  }, [])
-  
-  return (
-    <p>AnalyticsPage</p>
-  )
+    fetchAnalytics(); // Initial fetch immediately
+
+    const interval = setInterval(() => {
+      fetchAnalytics();
+    }, TELEMETRY_FETCH_INTERVAL); 
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
+  return <p>AnalyticsPage</p>;
 }

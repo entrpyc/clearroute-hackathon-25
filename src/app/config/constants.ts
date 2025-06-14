@@ -1,5 +1,5 @@
 export const API_ROUTES = {
-  TELEMETRY: 'api/telemetry'
+  TELEMETRY: '/api/telemetry'
 }
 
 export enum TelemetryKeys {
@@ -55,3 +55,5 @@ export enum TelemetryKeys {
   STEERING_CORRECTION = "Steering Correction",
   LAP_DELTA = "Lap Delta"
 }
+
+export const TELEMETRY_FETCH_INTERVAL = parseInt(process.env.NEXT_PUBLIC_TELEMETRY_INTERVAL_MS || '3000', 10);
