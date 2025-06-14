@@ -2,6 +2,10 @@ export const API_ROUTES = {
   TELEMETRY: '/api/telemetry',
 }
 
+export const QUERY_PARAMS = {
+  SNAPSHOT: 'snapshot'
+}
+
 export enum TelemetryKeys {
   LAP = "Lap",
   TIME = "Time",
@@ -56,4 +60,4 @@ export enum TelemetryKeys {
   LAP_DELTA = "Lap Delta"
 }
 
-export const TELEMETRY_FETCH_INTERVAL = parseInt(process.env.NEXT_PUBLIC_TELEMETRY_INTERVAL || '3000', 10);
+export const TELEMETRY_STREAM_INTERVAL = parseInt(process.env.NEXT_PUBLIC_TELEMETRY_INTERVAL || '3000', 10);
