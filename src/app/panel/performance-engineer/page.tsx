@@ -1,12 +1,12 @@
 'use client'
 
-import { TelemetryKeys } from "@/types/telemetry";
+import { API_ROUTES, TelemetryKeys } from "@/app/config/constants";
 import { useEffect } from "react";
 
 export default function PerformanceEngineerPage() {
 
   const fetchAnalytics = async() => {
-    const res = await fetch('/api/telemetry');
+    const res = await fetch(API_ROUTES.TELEMETRY);
     const data = await res.json();
 
     console.log(data)

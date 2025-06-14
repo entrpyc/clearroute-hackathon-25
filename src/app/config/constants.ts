@@ -1,3 +1,7 @@
+export const API_ROUTES = {
+  TELEMETRY: 'api/telemetry'
+}
+
 export enum TelemetryKeys {
   LAP = "Lap",
   TIME = "Time",
