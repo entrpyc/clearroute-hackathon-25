@@ -22,6 +22,8 @@ import DriverInputChart from "@/components/DriverInputChart";
 import FuelEfficiencyChart from "@/components/FuelEfficiencyChart";
 import PowerUnitChart from "@/components/PowerUnitChart";
 import BrakeSystemChart from "@/components/BrakeSystemChart";
+import { useEffect } from "react";
+import { getFuture } from "@/services/getFuture";
 
 export default function DashboardLayout() {
   const {
@@ -52,6 +54,10 @@ export default function DashboardLayout() {
       addAnomalies([...anomalies, /*...futureAnomalies*/ ]);
     },
   });
+
+  useEffect(() => {
+    if(allSnapshots.length > 5) getFuture(allSnapshots)
+  }, [allSnapshots])
 
   return (
     <div className="h-screen w-full flex flex-col">

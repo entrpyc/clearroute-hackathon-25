@@ -1,7 +1,7 @@
 export const API_ROUTES = {
   TELEMETRY: '/api/telemetry',
   STRATEGY: '/api/strategy',
-  FUTURE: '/api/strategy',
+  FUTURE: '/api/future',
 }
 
 export enum TelemetryKeys {
