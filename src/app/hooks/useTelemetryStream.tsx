@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getSnapshot } from "@/services/telemetry/getSnapshot";
+import { getSnapshot } from "@/services/getSnapshot";
 import { TELEMETRY_STREAM_INTERVAL } from "../config/constants";
 import { TelemetrySnapshot } from '../config/types';
 

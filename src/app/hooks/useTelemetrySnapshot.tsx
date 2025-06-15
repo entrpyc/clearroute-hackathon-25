@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSnapshot } from "@/services/telemetry/getSnapshot";
+import { getSnapshot } from "@/services/getSnapshot";
 import { TelemetrySnapshot } from '../config/types';
 
 const useTelemetrySnapshot = (snapIndex: number) => {
