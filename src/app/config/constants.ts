@@ -60,4 +60,8 @@ export enum TelemetryKeys {
   LAP_DELTA = "Lap Delta"
 }
 
+export type TelemetrySnapshot = {
+  [K in TelemetryKeys]: string;
+} | object;
+
 export const TELEMETRY_STREAM_INTERVAL = parseInt(process.env.NEXT_PUBLIC_TELEMETRY_INTERVAL || '3000', 10);

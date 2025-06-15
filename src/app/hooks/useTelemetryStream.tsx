@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { getSnapshot } from "@/services/telemetry/getSnapshot";
-import { TELEMETRY_STREAM_INTERVAL } from "../config/constants";
+import { TELEMETRY_STREAM_INTERVAL, TelemetrySnapshot } from "../config/constants";
 
 const useTelemetryStream = () => {
-  const [snapshot, setSnapshot] = useState({});
+  const [snapshot, setSnapshot] = useState<TelemetrySnapshot | null>(null);
   const snapIndex = useRef(0);
 
   useEffect(() => {
     const readTelemetryStream = async () => {
       const data = await getSnapshot(snapIndex.current);
-      if (data.done) return;
+      if (data?.done) return;
 
-      setSnapshot(data.snapshot);
+      setSnapshot(data.snapshot || null);
       snapIndex.current += 1;
     };
 
