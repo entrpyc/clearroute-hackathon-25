@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
 
 import useSnapshotData from "@/app/hooks/useSnapshotData";
@@ -24,7 +25,6 @@ import BrakeSystemChart from "@/components/BrakeSystemChart";
 import { useEffect, useState } from "react";
 import { TABS, TELEMETRY_STREAM_INTERVAL } from "@/app/config/constants";
 import { getFuture } from "@/services/getFuture";
-import Track from "@/components/Track";
 
 export default function DashboardLayout() {
   const {
@@ -159,11 +159,6 @@ export default function DashboardLayout() {
           )}
         </div>}
       </div>
-
-      {(activePath === TABS[4].label) && (
-        <Track />
-      )}
-
       {/* Timeline + Navigation */}
       <div className="p-4">
         <div className="flex items-center justify-between gap-4">

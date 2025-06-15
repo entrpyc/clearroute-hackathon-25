@@ -65,5 +65,4 @@ export const TABS = [
   { label: 'Statistics' },
   { label: 'Diagrams' },
   { label: 'Strategies' },
-  { label: 'Track' }
 ]

@@ -1,8 +1,7 @@
 'use client'
 import { TABS } from '@/app/config/constants'
-import { useEffect } from 'react'
 
-export function DashboardNav({ activePath, setActivePath }) {
+export function DashboardNav({ activePath, setActivePath }: { activePath: any, setActivePath: any }) {
   const handleTabClick = (label: string) => {
     setActivePath(label)
   }
