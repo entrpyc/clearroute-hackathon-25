@@ -1,5 +1,5 @@
-import AiStrategyProvider from '../context/aiStrategy-provider'
 import SnapshotProvider from '../context/snapshot-provider'
+import StrategyProvider from '../context/strategy-provider'
  
 export default function RootLayout({
   children,
@@ -8,9 +8,9 @@ export default function RootLayout({
 }) {
   return (
     <SnapshotProvider>
-      <AiStrategyProvider>
+      <StrategyProvider>
         {children}
-      </AiStrategyProvider>
+      </StrategyProvider>
     </SnapshotProvider>
   )
 }

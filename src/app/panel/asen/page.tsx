@@ -16,6 +16,7 @@ import TireTemperatureChartCard from "@/components/TireTemperatureChartCard";
 import { TelemetrySnapshot } from "@/app/config/types";
 import { DashboardNav } from '@/components/DashboardNav';
 import { getStrategy } from "@/services/getStrategy";
+import useStrategyData from "@/app/hooks/useStrategyData";
 
 const suggestions = [
   { id: 1, text: "Reduce brake bias for turn 4." },
@@ -29,15 +30,21 @@ const anomalies = [
 
 export default function DashboardLayout() {
   const { addSnapshot, selectSnapshot, allSnapshots, currentSnapshot } = useSnapshotData();
+  const { addSuggestions, addAnomalies } = useStrategyData();
 
   useTelemetryStream({
     onSnap: async (snap: TelemetrySnapshot) => {
       addSnapshot(snap);
 
-      const strategy = await getStrategy([ ...allSnapshots, snap]);
-      // const future = await getFuture([ ...allSnapshots, snap]);
-      // const futureStrategy = await getStrategy([ ...allSnapshots, snap, future]);
-      console.log(strategy)
+      const { anomalies, suggestions } = await getStrategy([ ...allSnapshots, snap]);
+      // const future = await getFuture();
+      // const {
+      //   anomalies: futureAnomalies,
+      //   suggestions: futureSuggestions,
+      // } = await getStrategy([ ...allSnapshots, snap, future]);
+
+      addSuggestions([...suggestions, /*...futureSuggestions*/ ]);
+      addAnomalies([...anomalies, /*...futureAnomalies*/ ]);
     },
   });
 

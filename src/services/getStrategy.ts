@@ -15,5 +15,5 @@ export const getStrategy = async (dataset: TelemetrySnapshot[]) => {
     console.error("Failed to fetch strategy:", error);
   }
 
-  return data;
+  return data.strategy;
 };
