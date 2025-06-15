@@ -14,7 +14,6 @@ import {
 } from '@/components/ui/card';
 import { TelemetrySnapshot } from "@/app/config/types";
 import { DashboardNav } from '@/components/DashboardNav';
-import { getStrategy } from "@/services/getStrategy";
 import useStrategyData from "@/app/hooks/useStrategyData";
 import PaceTrendsChart from "@/components/PaceTrendsChart";
 import TirePerformanceChart from "@/components/TirePerformanceChart";
@@ -24,6 +23,8 @@ import PowerUnitChart from "@/components/PowerUnitChart";
 import BrakeSystemChart from "@/components/BrakeSystemChart";
 import { useEffect, useState } from "react";
 import { TABS, TELEMETRY_STREAM_INTERVAL } from "@/app/config/constants";
+import { getFuture } from "@/services/getFuture";
+import Track from "@/components/Track";
 
 export default function DashboardLayout() {
   const {
@@ -34,8 +35,9 @@ export default function DashboardLayout() {
     currentSnapshotIndex,
     futureSnapshots,
     allSnapshotsAndFutures,
+    addFutureSnapshots,
   } = useSnapshotData();
-  const { addSuggestions, addAnomalies, suggestions, anomalies } = useStrategyData();
+  const { addSuggestions, suggestions } = useStrategyData();
   const [activePath, setActivePath] = useState(TABS[0].label);
 
 
@@ -45,30 +47,37 @@ export default function DashboardLayout() {
   const { readTelemetryStream } = useTelemetryStream({
     onSnap: async (snap: TelemetrySnapshot) => {
       addSnapshot(snap);
-
-      const { anomalies, suggestions } = await getStrategy([ ...allSnapshots, snap]);
-      // const future = await getFuture();
-      // const {
-      //   anomalies: futureAnomalies,
-      //   suggestions: futureSuggestions,
-      // } = await getStrategy([ ...allSnapshots, snap, future]);
-
-      addSuggestions([...suggestions, /*...futureSuggestions*/ ]);
-      addAnomalies([...anomalies, /*...futureAnomalies*/ ]);
     },
   });
 
   useEffect(() => {
     readTelemetryStream();
 
-
     const interval = setInterval(readTelemetryStream, TELEMETRY_STREAM_INTERVAL);
     return () => clearInterval(interval);
+  }, []);
 
-  }, [])
-  // useEffect(() => {
-  //   if(allSnapshots.length > 5) getFuture(allSnapshots)
-  // }, [allSnapshots])
+  const fetchSuggestions = async () => {
+    const response = await getFuture(allSnapshots);
+
+    const {
+      suggestions: futureSuggestions,
+      futures
+    } = response || {}
+
+    if(futureSuggestions) addSuggestions(futureSuggestions);
+    if(futures) addFutureSnapshots(futures)
+  }
+
+  useEffect(() => {
+    fetchSuggestions(); // initial fetch
+
+    const interval = setInterval(() => {
+      fetchSuggestions();
+    }, 10_000); // every 10 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="h-screen w-full flex flex-col">
@@ -130,7 +139,7 @@ export default function DashboardLayout() {
                   </div>
                 </div>
 
-                <div className="flex flex-col flex-1 overflow-hidden">
+                {/* <div className="flex flex-col flex-1 overflow-hidden">
                   <h3 className="text-sm font-semibold mb-1">Anomalies</h3>
                   <div className="space-y-2 overflow-y-auto flex-1 pr-2">
                     {anomalies.map(({ snapshot, text }, i) => (
@@ -144,12 +153,16 @@ export default function DashboardLayout() {
                       )
                     ))}
                   </div>
-                </div>
+                </div> */}
               </CardContent>
             </Card>
           )}
         </div>
       </div>
+
+      {(activePath === TABS[4].label) && (
+        <Track />
+      )}
 
       {/* Timeline + Navigation */}
       <div className="p-4">

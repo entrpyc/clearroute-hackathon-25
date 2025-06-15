@@ -19,7 +19,5 @@ export const getFuture = async (dataset: TelemetrySnapshot[]) => {
     console.error("Failed to fetch future telemetry:", error);
   }
 
-  console.log(data)
-
   return data;
 };

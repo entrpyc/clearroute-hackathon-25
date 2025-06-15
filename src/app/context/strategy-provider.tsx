@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 type StrategyBlockType = {
   text: string;
@@ -30,12 +30,17 @@ export default function StrategyProvider({
   const [anomalies, setAnomalies] = useState<StrategyBlockType[]>([]);
 
   const addSuggestions = (strategy: StrategyBlockType[]) => {
+    console.log(strategy)
     setSuggestions((val) => [...val, ...strategy]);
   };
 
   const addAnomalies = (strategy: StrategyBlockType[]) => {
     setAnomalies((val) => [...val, ...strategy]);
   };
+
+  useEffect(() => {
+    console.log(suggestions)
+  }, [suggestions])
 
   return (
     <StrategyContext.Provider

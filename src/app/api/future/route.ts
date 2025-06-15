@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server';
 
-
 export async function POST(req: Request) {
   const body = await req.json();
   const dataset = body.dataset;
 
   if(!dataset) NextResponse.json({ error: 'Missing dataset' });
 
-  // send to AI agent
   const res = await fetch('https://google-adk-example.fabric-uk.clearroute.io/api/predict', {
     method: 'POST',
     headers: {
@@ -17,25 +15,16 @@ export async function POST(req: Request) {
       laps: dataset
     })
   })
+
   const parsedResponse = await res.json();
-  console.log(parsedResponse)
 
-  // mock response
-  const strategy = {
-    test: parsedResponse,
-    suggestions: [
-      {
-        text: 'Reduce brake bias for turn 4.',
-        snapshot: dataset.length - 1
-      }
-    ],
-    anomalies: [
-      {
-        text: 'Rear right tire overheating (104.7°C).',
-        snapshot: dataset.length - 1
-      }
-    ]
-  }
+  if(!parsedResponse?.parsedResponse?.answer?.comment) NextResponse.json({ error: 'No data'})
 
-  return NextResponse.json({ strategy });
+  return NextResponse.json({
+    suggestions: [{
+      text: parsedResponse.answer.comment,
+      snapshot: dataset.length - 1
+    }],
+    futures: parsedResponse.answer.next_laps
+  });
 }
