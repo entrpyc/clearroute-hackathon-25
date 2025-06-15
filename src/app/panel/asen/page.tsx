@@ -74,10 +74,10 @@ export default function DashboardLayout() {
             <CardHeader>
               <CardTitle>AI Strategies</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col gap-4">
-              <div className="flex flex-col">
+            <CardContent className="flex flex-col gap-4 flex-1 overflow-hidden">
+              <div className="flex flex-col flex-1 overflow-hidden">
                 <h3 className="text-sm font-semibold mb-1">Suggestions</h3>
-                <div className="space-y-2 overflow-y-auto max-h-[150px] pr-2">
+                <div className="space-y-2 overflow-y-auto flex-1 pr-2">
                   {suggestions.map(({ snapshot, text }, i) => (
                     i <= currentSnapshotIndex && (
                       <div key={i} className="p-2 bg-muted rounded text-sm">
@@ -87,9 +87,10 @@ export default function DashboardLayout() {
                   ))}
                 </div>
               </div>
-              <div className="flex flex-col">
+
+              <div className="flex flex-col flex-1 overflow-hidden">
                 <h3 className="text-sm font-semibold mb-1">Anomalies</h3>
-                <div className="space-y-2 overflow-y-auto max-h-[150px] pr-2">
+                <div className="space-y-2 overflow-y-auto flex-1 pr-2">
                   {anomalies.map(({ snapshot, text }, i) => (
                     i <= currentSnapshotIndex && (
                       <div
@@ -103,22 +104,6 @@ export default function DashboardLayout() {
                 </div>
               </div>
             </CardContent>
-          </Card>
-
-          {/* AI Chat Agent */}
-          <Card className="flex flex-col h-[300px] overflow-hidden">
-            <CardHeader>
-              <CardTitle>AI Chat Agent</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1 overflow-y-auto space-y-2">
-              {/* Chat messages */}
-            </CardContent>
-            <div className="border-t p-2">
-              <input
-                placeholder="Type a message"
-                className="w-full border rounded px-3 py-1 text-sm"
-              />
-            </div>
           </Card>
         </div>
       </div>
