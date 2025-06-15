@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getSnapshot } from "@/services/telemetry/getSnapshot";
-import { TELEMETRY_STREAM_INTERVAL, TelemetrySnapshot } from "../config/constants";
+import { TELEMETRY_STREAM_INTERVAL } from "../config/constants";
+import { TelemetrySnapshot } from '../config/types';
 
 const useTelemetryStream = () => {
   const [snapshot, setSnapshot] = useState<TelemetrySnapshot | null>(null);
