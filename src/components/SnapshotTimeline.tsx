@@ -46,7 +46,7 @@ export default function SnapshotTimeline({ total, onSelect }: Props) {
   };
 
   return (
-    <div className="w-full max-w-[400px] mx-auto flex flex-col gap-3">
+    <div className="w-full max-w-[400px] flex flex-col gap-3">
       {/* Scrollable timeline */}
       <div
         ref={scrollRef}

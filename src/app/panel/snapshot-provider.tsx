@@ -5,7 +5,7 @@ import { TelemetrySnapshot } from '../config/types';
 
 type SnapshotContextType = {
   allSnapshots: TelemetrySnapshot[];
-  currentSnapshot?: TelemetrySnapshot;
+  currentSnapshot: TelemetrySnapshot | null;
   futureSnapshots: TelemetrySnapshot[];
   setCurrentSnapshot: (snap: TelemetrySnapshot) => void;
   setFutureSnapshots: (snaps: TelemetrySnapshot[]) => void;
@@ -15,7 +15,7 @@ type SnapshotContextType = {
 
 export const SnapshotContext = createContext<SnapshotContextType>({
   allSnapshots: [],
-  currentSnapshot: undefined,
+  currentSnapshot: null,
   futureSnapshots: [],
   setCurrentSnapshot: () => {},
   setFutureSnapshots: () => {},
@@ -29,7 +29,7 @@ export default function SnapshotProvider({
   children: React.ReactNode;
 }) {
   const [allSnapshots, setAllSnapshots] = useState<TelemetrySnapshot[]>([]);
-  const [currentSnapshot, setCurrentSnapshot] = useState<TelemetrySnapshot>();
+  const [currentSnapshot, setCurrentSnapshot] = useState<TelemetrySnapshot | null>(null);
   const [futureSnapshots, setFutureSnapshots] = useState<TelemetrySnapshot[]>([]);
 
   const addSnapshot = (snap: TelemetrySnapshot) => {
