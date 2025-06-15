@@ -13,10 +13,12 @@ export default function SnapshotTimeline({ total, futures, onSelect }: Props) {
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const [selected, setSelected] = useState<number>(total - 1);
   const [isLive, setIsLive] = useState<boolean>(true);
-  const [isFuture, setIsFuture] = useState<boolean>(true);
+  const [futureOffset, setFutureOffset] = useState<number>(0);
   const [hasUserScrolled, setHasUserScrolled] = useState<boolean>(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const isFuture = selected > total -1;
 
   useEffect(() => {
     if (!isLive) return;
@@ -25,12 +27,11 @@ export default function SnapshotTimeline({ total, futures, onSelect }: Props) {
   }, [isLive, total]);
 
   useEffect(() => {
-    setIsFuture(selected > total);
-  }, [selected, total]);
+    if(!isFuture) return;
 
-  useEffect(() => {
-    if(isFuture) setSelected(curr => curr + 1);
-  }, [total, futures])
+    setSelected(total + futureOffset);
+    onSelect(total + futureOffset);
+  }, [futureOffset, total, isFuture]);
 
   useEffect(() => {
     if ((isLive || isFuture) && !hasUserScrolled && scrollRef.current) {
@@ -79,6 +80,7 @@ export default function SnapshotTimeline({ total, futures, onSelect }: Props) {
                 setSelected(i);
                 onSelect(i);
                 setIsLive(false);
+                setFutureOffset(i - total);
               }}
             >
               {hoverIndex === i && (

@@ -25,7 +25,6 @@ export default function DashboardLayout() {
     allSnapshots,
     currentSnapshot,
     currentSnapshotIndex,
-    allSnapshotsAndFutures,
     futureSnapshots,
   } = useSnapshotData();
   const { addSuggestions, addAnomalies, suggestions, anomalies } = useStrategyData();
@@ -123,7 +122,7 @@ export default function DashboardLayout() {
           <div className="flex-1 overflow-x-auto">
             <SnapshotTimeline
               futures={futureSnapshots.length}
-              total={allSnapshotsAndFutures.length}
+              total={allSnapshots.length}
               onSelect={(index) => selectSnapshot(index)}
             />
           </div>
