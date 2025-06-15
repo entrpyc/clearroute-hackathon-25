@@ -1,4 +1,5 @@
-import SnapshotProvider from './snapshot-provider'
+import AiStrategyProvider from '../context/aiStrategy-provider'
+import SnapshotProvider from '../context/snapshot-provider'
  
 export default function RootLayout({
   children,
@@ -6,6 +7,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <SnapshotProvider>{children}</SnapshotProvider>
+    <SnapshotProvider>
+      <AiStrategyProvider>
+        {children}
+      </AiStrategyProvider>
+    </SnapshotProvider>
   )
 }
