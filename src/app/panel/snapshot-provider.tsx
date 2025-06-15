@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useEffect, useState } from 'react';
-import { TelemetrySnapshot } from '../config/constants';
+import { TelemetrySnapshot } from '../config/types';
 
 type SnapshotContextType = {
   allSnapshots: TelemetrySnapshot[];
