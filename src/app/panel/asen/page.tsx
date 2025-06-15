@@ -18,19 +18,9 @@ import { DashboardNav } from '@/components/DashboardNav';
 import { getStrategy } from "@/services/getStrategy";
 import useStrategyData from "@/app/hooks/useStrategyData";
 
-const suggestions = [
-  { id: 1, text: "Reduce brake bias for turn 4." },
-  { id: 2, text: "Try aggressive ERS mode in sector 2." },
-];
-
-const anomalies = [
-  { id: 1, text: "Rear right tire overheating (104.7°C)." },
-  { id: 2, text: "ERS battery temperature above threshold." },
-];
-
 export default function DashboardLayout() {
   const { addSnapshot, selectSnapshot, allSnapshots, currentSnapshot } = useSnapshotData();
-  const { addSuggestions, addAnomalies } = useStrategyData();
+  const { addSuggestions, addAnomalies, suggestions, anomalies } = useStrategyData();
 
   useTelemetryStream({
     onSnap: async (snap: TelemetrySnapshot) => {
@@ -88,9 +78,9 @@ export default function DashboardLayout() {
               <div>
                 <h3 className="text-sm font-semibold mb-1">Suggestions</h3>
                 <div className="space-y-2">
-                  {suggestions.map((s) => (
-                    <div key={s.id} className="p-2 bg-muted rounded text-sm">
-                      ⚡ {s.text}
+                  {suggestions.map(({ snapshot, text }, k) => (
+                    <div key={k} className="p-2 bg-muted rounded text-sm">
+                      ⚡ {text} Lap: {snapshot}
                     </div>
                   ))}
                 </div>
@@ -98,9 +88,9 @@ export default function DashboardLayout() {
               <div>
                 <h3 className="text-sm font-semibold mb-1">Anomalies</h3>
                 <div className="space-y-2">
-                  {anomalies.map((a) => (
-                    <div key={a.id} className="p-2 bg-destructive/10 border border-destructive rounded text-sm text-destructive">
-                      ⚠️ {a.text}
+                  {anomalies.map(({ snapshot, text }, i) => (
+                    <div key={i} className="p-2 bg-destructive/10 border border-destructive rounded text-sm text-destructive">
+                      ⚠️ {text} Lap: {snapshot}
                     </div>
                   ))}
                 </div>
