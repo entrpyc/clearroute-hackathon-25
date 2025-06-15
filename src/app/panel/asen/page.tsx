@@ -12,11 +12,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import TireTemperatureChartCard from "@/components/TireTemperatureChartCard";
 import { TelemetrySnapshot } from "@/app/config/types";
 import { DashboardNav } from '@/components/DashboardNav';
 import { getStrategy } from "@/services/getStrategy";
 import useStrategyData from "@/app/hooks/useStrategyData";
+import PaceTrendsChart from "@/components/PaceTrendsChart";
+import TirePerformanceChart from "@/components/TirePerformanceChart";
+import DriverInputChart from "@/components/DriverInputChart";
+import FuelEfficiencyChart from "@/components/FuelEfficiencyChart";
+import PowerUnitChart from "@/components/PowerUnitChart";
+import BrakeSystemChart from "@/components/BrakeSystemChart";
 
 export default function DashboardLayout() {
   const {
@@ -26,8 +31,11 @@ export default function DashboardLayout() {
     currentSnapshot,
     currentSnapshotIndex,
     futureSnapshots,
+    allSnapshotsAndFutures,
   } = useSnapshotData();
   const { addSuggestions, addAnomalies, suggestions, anomalies } = useStrategyData();
+
+  const snapshotChunk = allSnapshotsAndFutures.slice(0, currentSnapshotIndex + 1);
 
   useTelemetryStream({
     onSnap: async (snap: TelemetrySnapshot) => {
@@ -67,9 +75,12 @@ export default function DashboardLayout() {
               <CardTitle>Diagrams</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-2">
-              <TireTemperatureChartCard />
-
-              {/* Add more charts as needed */}
+              <PaceTrendsChart data={snapshotChunk} />
+              <TirePerformanceChart data={snapshotChunk} />
+              <BrakeSystemChart data={snapshotChunk} />
+              <PowerUnitChart data={snapshotChunk} />
+              <FuelEfficiencyChart data={snapshotChunk} />
+              <DriverInputChart data={snapshotChunk} />
             </CardContent>
           </Card>
         </div>

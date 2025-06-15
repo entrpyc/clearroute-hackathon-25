@@ -107,7 +107,7 @@ export default function SnapshotTimeline({ total, futures, onSelect }: Props) {
           {isLive ? '🟢' : '🔴'} Live
         </div>
         <div className="text-sm text-muted-foreground">
-          Selected: <strong>{selected < 0 ? 'none': selected}</strong>
+          Selected lap: <strong>{selected < 0 ? 'none': selected + 1}</strong>
         </div>
       </div>
     </div>
