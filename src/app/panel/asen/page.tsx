@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/card';
 import TireTemperatureChartCard from "@/components/TireTemperatureChartCard";
 import { TelemetrySnapshot } from "@/app/config/types";
+import { DashboardNav } from '@/components/DashboardNav';
 
 const suggestions = [
   { id: 1, text: "Reduce brake bias for turn 4." },
@@ -123,11 +124,12 @@ export default function DashboardLayout() {
 
           {/* Navigation aligned to the right */}
           <div className="flex gap-2 shrink-0">
-            {['Live', 'Dashboard', 'Statistics', 'Diagrams', 'AI Agent'].map((label) => (
+            {/* {['Live', 'Dashboard', 'Statistics', 'Diagrams', 'AI Agent'].map((label) => (
               <button key={label} className="px-3 py-1 rounded bg-muted text-sm">
                 {label}
               </button>
-            ))}
+            ))} */}
+            <DashboardNav />
           </div>
         </div>
       </div>
