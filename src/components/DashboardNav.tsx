@@ -1,37 +1,20 @@
 'use client'
-import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { TABS } from '@/app/config/constants'
+import { useEffect } from 'react'
 
-
-const tabs = [
-  { label: 'Dashboard', path: '/panel/asen' },
-  { label: 'Statistics', path: '/dashboard/statistics' },
-  { label: 'Diagrams', path: '/dashboard/diagrams' },
-  { label: 'Track', path: '/dashboard/track' },  
-]
-
-export function DashboardNav() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const [activePath, setActivePath] = useState(pathname)
-
-  useEffect(() => {
-    setActivePath(pathname)
-  }, [pathname])
-
-  const handleTabClick = (path: string) => {
-    setActivePath(path)
-    router.push(path)
+export function DashboardNav({ activePath, setActivePath }) {
+  const handleTabClick = (label: string) => {
+    setActivePath(label)
   }
 
   return (
     <div className="fixed bottom-4 right-4 z-50 flex gap-2 bg-background/80 p-2 rounded-lg shadow-lg border">
-      {tabs.map(({ label, path }) => (
+      {TABS.map(({ label }) => (
         <button
           key={label}
-          onClick={() => handleTabClick(path)}
+          onClick={() => handleTabClick(label)}
           className={`px-3 py-1 rounded text-sm cursor-pointer hover:bg-muted/50 hover:text-muted-foreground ${
-            activePath === path ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
+            activePath === label ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
           }`}
         >
           {label}

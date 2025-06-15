@@ -22,8 +22,8 @@ import DriverInputChart from "@/components/DriverInputChart";
 import FuelEfficiencyChart from "@/components/FuelEfficiencyChart";
 import PowerUnitChart from "@/components/PowerUnitChart";
 import BrakeSystemChart from "@/components/BrakeSystemChart";
-import { useEffect } from "react";
-import { getFuture } from "@/services/getFuture";
+import { useEffect, useState } from "react";
+import { TABS, TELEMETRY_STREAM_INTERVAL } from "@/app/config/constants";
 
 export default function DashboardLayout() {
   const {
@@ -36,10 +36,13 @@ export default function DashboardLayout() {
     allSnapshotsAndFutures,
   } = useSnapshotData();
   const { addSuggestions, addAnomalies, suggestions, anomalies } = useStrategyData();
+  const [activePath, setActivePath] = useState(TABS[0].label);
+
+
 
   const snapshotChunk = allSnapshotsAndFutures.slice(0, currentSnapshotIndex + 1);
 
-  useTelemetryStream({
+  const { readTelemetryStream } = useTelemetryStream({
     onSnap: async (snap: TelemetrySnapshot) => {
       addSnapshot(snap);
 
@@ -56,8 +59,16 @@ export default function DashboardLayout() {
   });
 
   useEffect(() => {
-    if(allSnapshots.length > 5) getFuture(allSnapshots)
-  }, [allSnapshots])
+    readTelemetryStream();
+
+
+    const interval = setInterval(readTelemetryStream, TELEMETRY_STREAM_INTERVAL);
+    return () => clearInterval(interval);
+
+  }, [])
+  // useEffect(() => {
+  //   if(allSnapshots.length > 5) getFuture(allSnapshots)
+  // }, [allSnapshots])
 
   return (
     <div className="h-screen w-full flex flex-col">
@@ -66,69 +77,77 @@ export default function DashboardLayout() {
         {/* LEFT GRID */}
         <div className="flex flex-col flex-1 gap-4 overflow-hidden">
           {/* Statistics Card */}
-          <Card className="flex-1 overflow-auto min-h-[200px]">
-            <CardHeader>
-              <CardTitle>Statistics</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 overflow-y-auto">
-              <TelemetrySnapshotDisplay telemetryGroups={buildTelemetryGroups(currentSnapshot)} />
-            </CardContent>
-          </Card>
+          {(activePath === TABS[1].label || activePath === TABS[0].label) && (
+            <Card className="flex-1 overflow-auto min-h-[200px]">
+              <CardHeader>
+                <CardTitle>Statistics</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2 overflow-y-auto">
+                <TelemetrySnapshotDisplay telemetryGroups={buildTelemetryGroups(currentSnapshot)} />
+              </CardContent>
+            </Card>
+          )}
+
+          {(activePath === TABS[2].label || activePath === TABS[0].label) && (
+            <Card className="flex-1 overflow-auto min-h-[200px]">
+              <CardHeader>
+                <CardTitle>Diagrams</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-2 gap-2">
+                <PaceTrendsChart data={snapshotChunk} />
+                <TirePerformanceChart data={snapshotChunk} />
+                <BrakeSystemChart data={snapshotChunk} />
+                <PowerUnitChart data={snapshotChunk} />
+                <FuelEfficiencyChart data={snapshotChunk} />
+                <DriverInputChart data={snapshotChunk} />
+              </CardContent>
+            </Card>
+          )}
 
           {/* Diagrams Grid */}
-          <Card className="flex-1 overflow-auto min-h-[200px]">
-            <CardHeader>
-              <CardTitle>Diagrams</CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-2">
-              <PaceTrendsChart data={snapshotChunk} />
-              <TirePerformanceChart data={snapshotChunk} />
-              <BrakeSystemChart data={snapshotChunk} />
-              <PowerUnitChart data={snapshotChunk} />
-              <FuelEfficiencyChart data={snapshotChunk} />
-              <DriverInputChart data={snapshotChunk} />
-            </CardContent>
-          </Card>
+          
         </div>
 
         {/* RIGHT GRID */}
         <div className="flex flex-col w-[30%] min-w-[300px] gap-4 overflow-hidden">
           {/* AI Strategies: Suggestions + Anomalies */}
-          <Card className="flex-1 overflow-hidden">
-            <CardHeader>
-              <CardTitle>AI Strategies</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-4 flex-1 overflow-hidden">
-              <div className="flex flex-col flex-1 overflow-hidden">
-                <h3 className="text-sm font-semibold mb-1">Suggestions</h3>
-                <div className="space-y-2 overflow-y-auto flex-1 pr-2">
-                  {suggestions.map(({ snapshot, text }, i) => (
-                    i <= currentSnapshotIndex && (
-                      <div key={i} className="p-2 bg-muted rounded text-sm">
-                        ⚡ {text} Lap: {snapshot}
-                      </div>
-                    )
-                  ))}
+          {(activePath === TABS[3].label || activePath === TABS[0].label) && (
+            <Card className="flex-1 overflow-hidden">
+              <CardHeader>
+                <CardTitle>AI Strategies</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4 flex-1 overflow-hidden">
+                <div className="flex flex-col flex-1 overflow-hidden">
+                  <h3 className="text-sm font-semibold mb-1">Suggestions</h3>
+                  <div className="space-y-2 overflow-y-auto flex-1 pr-2">
+                    {suggestions.map(({ snapshot, text }, i) => (
+                      i <= currentSnapshotIndex && (
+                        <div key={i} className="p-2 bg-muted rounded text-sm">
+                          ⚡ {text} Lap: {snapshot}
+                        </div>
+                      )
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex flex-col flex-1 overflow-hidden">
-                <h3 className="text-sm font-semibold mb-1">Anomalies</h3>
-                <div className="space-y-2 overflow-y-auto flex-1 pr-2">
-                  {anomalies.map(({ snapshot, text }, i) => (
-                    i <= currentSnapshotIndex && (
-                      <div
-                        key={i}
-                        className="p-2 bg-destructive/10 border border-destructive rounded text-sm text-destructive"
-                      >
-                        ⚠️ {text} Lap: {snapshot}
-                      </div>
-                    )
-                  ))}
+                <div className="flex flex-col flex-1 overflow-hidden">
+                  <h3 className="text-sm font-semibold mb-1">Anomalies</h3>
+                  <div className="space-y-2 overflow-y-auto flex-1 pr-2">
+                    {anomalies.map(({ snapshot, text }, i) => (
+                      i <= currentSnapshotIndex && (
+                        <div
+                          key={i}
+                          className="p-2 bg-destructive/10 border border-destructive rounded text-sm text-destructive"
+                        >
+                          ⚠️ {text} Lap: {snapshot}
+                        </div>
+                      )
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
 
@@ -151,7 +170,7 @@ export default function DashboardLayout() {
                 {label}
               </button>
             ))} */}
-            <DashboardNav />
+            <DashboardNav activePath={activePath} setActivePath={setActivePath} />
           </div>
         </div>
       </div>

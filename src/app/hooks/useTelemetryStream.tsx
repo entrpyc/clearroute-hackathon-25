@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { getSnapshot } from "@/services/getSnapshot";
-import { TELEMETRY_STREAM_INTERVAL } from "../config/constants";
 import { TelemetrySnapshot } from '../config/types';
 
 const useTelemetryStream = ({
@@ -11,22 +10,18 @@ const useTelemetryStream = ({
   const [snapshot, setSnapshot] = useState<TelemetrySnapshot | null>(null);
   const snapIndex = useRef(0);
 
-  useEffect(() => {
-    const readTelemetryStream = async () => {
-      const data = await getSnapshot(snapIndex.current);
-      if (data?.done) return;
+  const readTelemetryStream = async () => {
+    const data = await getSnapshot(snapIndex.current);
+    if (data?.done) return;
 
-      setSnapshot(data.snapshot || null);
-      if(data.snapshot) onSnap(data.snapshot || null);
+    setSnapshot(data.snapshot || null);
+    if(data.snapshot) onSnap(data.snapshot || null);
 
-      snapIndex.current += 1;
-    };
-
-    const interval = setInterval(readTelemetryStream, TELEMETRY_STREAM_INTERVAL);
-    return () => clearInterval(interval);
-  }, []);
+    snapIndex.current += 1;
+  };
 
   return {
+    readTelemetryStream,
     snapshot,
   };
 };

@@ -59,3 +59,11 @@ export enum TelemetryKeys {
 }
 
 export const TELEMETRY_STREAM_INTERVAL = parseInt(process.env.NEXT_PUBLIC_TELEMETRY_INTERVAL || '3000', 10);
+
+export const TABS = [
+  { label: 'Dashboard' },
+  { label: 'Statistics' },
+  { label: 'Diagrams' },
+  { label: 'Strategies' },
+  { label: 'Track' }
+]
