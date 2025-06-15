@@ -5,10 +5,9 @@ import { useEffect, useState } from 'react'
 
 const tabs = [
   { label: 'Dashboard', path: '/panel/asen' },
-  { label: 'Live', path: '/dashboard/live' },  
   { label: 'Statistics', path: '/dashboard/statistics' },
   { label: 'Diagrams', path: '/dashboard/diagrams' },
-  { label: 'AI Agent', path: '/dashboard/ai-agent' },
+  { label: 'Track', path: '/dashboard/track' },  
 ]
 
 export function DashboardNav() {
