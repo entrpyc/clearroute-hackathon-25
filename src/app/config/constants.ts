@@ -2,10 +2,6 @@ export const API_ROUTES = {
   TELEMETRY: '/api/telemetry',
 }
 
-export const QUERY_PARAMS = {
-  SNAPSHOT: 'snapshot'
-}
-
 export enum TelemetryKeys {
   LAP = "Lap",
   TIME = "Time",
