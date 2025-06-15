@@ -19,7 +19,7 @@ import { getStrategy } from "@/services/getStrategy";
 import useStrategyData from "@/app/hooks/useStrategyData";
 
 export default function DashboardLayout() {
-  const { addSnapshot, selectSnapshot, allSnapshots, currentSnapshot } = useSnapshotData();
+  const { addSnapshot, selectSnapshot, allSnapshots, currentSnapshot, currentSnapshotIndex } = useSnapshotData();
   const { addSuggestions, addAnomalies, suggestions, anomalies } = useStrategyData();
 
   useTelemetryStream({
@@ -70,28 +70,35 @@ export default function DashboardLayout() {
         {/* RIGHT GRID */}
         <div className="flex flex-col w-[30%] min-w-[300px] gap-4 overflow-hidden">
           {/* AI Strategies: Suggestions + Anomalies */}
-          <Card className="flex-1 overflow-auto">
+          <Card className="flex-1 overflow-hidden">
             <CardHeader>
               <CardTitle>AI Strategies</CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-col gap-4 overflow-y-auto">
-              <div>
+            <CardContent className="flex flex-col gap-4">
+              <div className="flex flex-col">
                 <h3 className="text-sm font-semibold mb-1">Suggestions</h3>
-                <div className="space-y-2">
-                  {suggestions.map(({ snapshot, text }, k) => (
-                    <div key={k} className="p-2 bg-muted rounded text-sm">
-                      ⚡ {text} Lap: {snapshot}
-                    </div>
+                <div className="space-y-2 overflow-y-auto max-h-[150px] pr-2">
+                  {suggestions.map(({ snapshot, text }, i) => (
+                    i <= currentSnapshotIndex && (
+                      <div key={i} className="p-2 bg-muted rounded text-sm">
+                        ⚡ {text} Lap: {snapshot}
+                      </div>
+                    )
                   ))}
                 </div>
               </div>
-              <div>
+              <div className="flex flex-col">
                 <h3 className="text-sm font-semibold mb-1">Anomalies</h3>
-                <div className="space-y-2">
+                <div className="space-y-2 overflow-y-auto max-h-[150px] pr-2">
                   {anomalies.map(({ snapshot, text }, i) => (
-                    <div key={i} className="p-2 bg-destructive/10 border border-destructive rounded text-sm text-destructive">
-                      ⚠️ {text} Lap: {snapshot}
-                    </div>
+                    i <= currentSnapshotIndex && (
+                      <div
+                        key={i}
+                        className="p-2 bg-destructive/10 border border-destructive rounded text-sm text-destructive"
+                      >
+                        ⚠️ {text} Lap: {snapshot}
+                      </div>
+                    )
                   ))}
                 </div>
               </div>

@@ -7,6 +7,7 @@ type SnapshotContextType = {
   allSnapshots: TelemetrySnapshot[];
   currentSnapshot: TelemetrySnapshot | null;
   futureSnapshots: TelemetrySnapshot[];
+  currentSnapshotIndex: number;
   setCurrentSnapshot: (snap: TelemetrySnapshot) => void;
   setFutureSnapshots: (snaps: TelemetrySnapshot[]) => void;
   addSnapshot: (snap: TelemetrySnapshot) => void;
@@ -17,6 +18,7 @@ export const SnapshotContext = createContext<SnapshotContextType>({
   allSnapshots: [],
   currentSnapshot: null,
   futureSnapshots: [],
+  currentSnapshotIndex: 0,
   setCurrentSnapshot: () => {},
   setFutureSnapshots: () => {},
   addSnapshot: () => {},
@@ -30,6 +32,7 @@ export default function SnapshotProvider({
 }) {
   const [allSnapshots, setAllSnapshots] = useState<TelemetrySnapshot[]>([]);
   const [currentSnapshot, setCurrentSnapshot] = useState<TelemetrySnapshot | null>(null);
+  const [currentSnapshotIndex, setCurrentSnapshotIndex] = useState<number>(0);
   const [futureSnapshots, setFutureSnapshots] = useState<TelemetrySnapshot[]>([]);
 
   const addSnapshot = (snap: TelemetrySnapshot) => {
@@ -37,6 +40,7 @@ export default function SnapshotProvider({
   };
 
   const selectSnapshot = (index: number) => {
+    setCurrentSnapshotIndex(index);
     setCurrentSnapshot(allSnapshots[index]);
   }
 
@@ -54,6 +58,7 @@ export default function SnapshotProvider({
         futureSnapshots,
         setFutureSnapshots,
         selectSnapshot,
+        currentSnapshotIndex,
       }}
     >
       {children}
