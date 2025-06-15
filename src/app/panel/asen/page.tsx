@@ -5,7 +5,6 @@ import useTelemetryStream from "@/app/hooks/useTelemetryStream";
 import SnapshotTimeline from "@/components/SnapshotTimeline";
 import TelemetrySnapshotDisplay from "@/components/TelemetrySnapshotDisplay";
 import { buildTelemetryGroups } from "@/lib/telemetry/buildTelemetryGroups";
-import { useEffect } from "react";
 
 import {
   Card,
@@ -13,6 +12,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import TireTemperatureChartCard from "@/components/TireTemperatureChartCard";
+import { TelemetrySnapshot } from "@/app/config/types";
 import { DashboardNav } from '@/components/DashboardNav';
 
 const suggestions = [
@@ -26,12 +27,11 @@ const anomalies = [
 ];
 
 export default function DashboardLayout() {
-  const { snapshot } = useTelemetryStream();
   const { addSnapshot, selectSnapshot, allSnapshots, currentSnapshot } = useSnapshotData();
 
-  useEffect(() => {
-    if(snapshot) addSnapshot(snapshot);
-  }, [snapshot])
+  useTelemetryStream({
+    onSnap: (snap: TelemetrySnapshot) => addSnapshot(snap),
+  });
 
   return (
     <div className="h-screen w-full flex flex-col">
@@ -55,11 +55,9 @@ export default function DashboardLayout() {
               <CardTitle>Diagrams</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-2">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Card key={i} className="min-h-[100px]">
-                  <CardContent>{/* Chart */}</CardContent>
-                </Card>
-              ))}
+              <TireTemperatureChartCard />
+
+              {/* Add more charts as needed */}
             </CardContent>
           </Card>
         </div>

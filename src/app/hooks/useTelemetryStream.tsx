@@ -3,7 +3,11 @@ import { getSnapshot } from "@/services/telemetry/getSnapshot";
 import { TELEMETRY_STREAM_INTERVAL } from "../config/constants";
 import { TelemetrySnapshot } from '../config/types';
 
-const useTelemetryStream = () => {
+const useTelemetryStream = ({
+  onSnap
+}: {
+  onSnap: (snap: TelemetrySnapshot) => void
+}) => {
   const [snapshot, setSnapshot] = useState<TelemetrySnapshot | null>(null);
   const snapIndex = useRef(0);
 
@@ -13,6 +17,8 @@ const useTelemetryStream = () => {
       if (data?.done) return;
 
       setSnapshot(data.snapshot || null);
+      if(data.snapshot) onSnap(data.snapshot || null);
+
       snapIndex.current += 1;
     };
 
