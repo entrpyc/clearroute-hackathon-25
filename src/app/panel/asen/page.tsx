@@ -19,7 +19,15 @@ import { getStrategy } from "@/services/getStrategy";
 import useStrategyData from "@/app/hooks/useStrategyData";
 
 export default function DashboardLayout() {
-  const { addSnapshot, selectSnapshot, allSnapshots, currentSnapshot, currentSnapshotIndex } = useSnapshotData();
+  const {
+    addSnapshot,
+    selectSnapshot,
+    allSnapshots,
+    currentSnapshot,
+    currentSnapshotIndex,
+    allSnapshotsAndFutures,
+    futureSnapshots,
+  } = useSnapshotData();
   const { addSuggestions, addAnomalies, suggestions, anomalies } = useStrategyData();
 
   useTelemetryStream({
@@ -114,7 +122,8 @@ export default function DashboardLayout() {
           {/* Timeline aligned to the left */}
           <div className="flex-1 overflow-x-auto">
             <SnapshotTimeline
-              total={allSnapshots.length}
+              futures={futureSnapshots.length}
+              total={allSnapshotsAndFutures.length}
               onSelect={(index) => selectSnapshot(index)}
             />
           </div>
