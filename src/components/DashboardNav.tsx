@@ -19,7 +19,7 @@ export function DashboardNav() {
         <button
           key={label}
           onClick={() => router.push(path)}
-          className={`px-3 py-1 rounded text-sm cursor-pointer hover:bg-muted/50 ${
+          className={`px-3 py-1 rounded text-sm cursor-pointer hover:bg-muted/50 hover:text-muted-foreground ${
             pathname === path ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
           }`}
         >
