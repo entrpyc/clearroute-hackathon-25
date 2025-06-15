@@ -84,7 +84,7 @@ export default function DashboardLayout() {
       {/* Main 2-Column Grid */}
       <div className="flex flex-1 overflow-hidden p-4 gap-4">
         {/* LEFT GRID */}
-        <div className="flex flex-col flex-1 gap-4 overflow-hidden">
+        {(activePath === TABS[1].label || activePath === TABS[0].label || activePath === TABS[2].label) && <div className="flex flex-col flex-1 gap-4 overflow-hidden">
           {/* Statistics Card */}
           {(activePath === TABS[1].label || activePath === TABS[0].label) && (
             <Card className="flex-1 overflow-auto min-h-[200px]">
@@ -115,10 +115,10 @@ export default function DashboardLayout() {
 
           {/* Diagrams Grid */}
           
-        </div>
+        </div>}
 
         {/* RIGHT GRID */}
-        <div className="flex flex-col w-[30%] min-w-[300px] gap-4 overflow-hidden">
+        {(activePath === TABS[3].label || activePath === TABS[0].label) && <div className={`flex flex-col ${activePath !== TABS[3].label && 'w-[30%]'} min-w-[300px] gap-4 overflow-hidden`}>
           {/* AI Strategies: Suggestions + Anomalies */}
           {(activePath === TABS[3].label || activePath === TABS[0].label) && (
             <Card className="flex-1 overflow-hidden">
@@ -157,7 +157,7 @@ export default function DashboardLayout() {
               </CardContent>
             </Card>
           )}
-        </div>
+        </div>}
       </div>
 
       {(activePath === TABS[4].label) && (
