@@ -2,7 +2,6 @@
 
 import { TelemetryKeys } from '@/app/config/constants';
 import useTelemetrySnapshot from "@/app/hooks/useTelemetrySnapshot";
-import useTelemetryStream from "@/app/hooks/useTelemetryStream";
 import { PitRecommendationBox } from '@/components/pitRecommendationBlock';
 import { useEffect, useRef, useState } from "react";
 import { toast } from 'sonner';
@@ -23,9 +22,8 @@ interface PitRecommendation {
 
 export default function PerformanceEngineerPage() {
 
-  const { snapshot: liveSnap } = useTelemetryStream()
+  // const { snapshot: histSnap } = useTelemetryStream()
   const { snapshot: histSnap } = useTelemetrySnapshot(4)
-  console.log(liveSnap)
   
 
   const [recommendation, setRecommendation] = useState<PitRecommendation>({
@@ -39,19 +37,19 @@ export default function PerformanceEngineerPage() {
   const hasToasted = useRef(false)
 
   useEffect(() => {
-    if (!liveSnap || !liveSnap[TelemetryKeys.LAP]) return
-    console.log(liveSnap)
+    if (!histSnap || !histSnap[TelemetryKeys.LAP]) return
+    console.log(histSnap)
 
-    const currentLap = Number(liveSnap[TelemetryKeys.LAP])
+    const currentLap = Number(histSnap[TelemetryKeys.LAP])
     const tireWearAvg =
-      (Number(liveSnap[TelemetryKeys.TIRE_WEAR_FL]) +
-        Number(liveSnap[TelemetryKeys.TIRE_WEAR_FR]) +
-        Number(liveSnap[TelemetryKeys.TIRE_WEAR_RL]) +
-        Number(liveSnap[TelemetryKeys.TIRE_WEAR_RR])) /
+      (Number(histSnap[TelemetryKeys.TIRE_WEAR_FL]) +
+        Number(histSnap[TelemetryKeys.TIRE_WEAR_FR]) +
+        Number(histSnap[TelemetryKeys.TIRE_WEAR_RL]) +
+        Number(histSnap[TelemetryKeys.TIRE_WEAR_RR])) /
       4
 
-    const fuelLevel = Number(liveSnap[TelemetryKeys.FUEL_LEVEL_PERCENT])
-    const ersCharge = Number(liveSnap[TelemetryKeys.ERS_STATE_OF_CHARGE])
+    const fuelLevel = Number(histSnap[TelemetryKeys.FUEL_LEVEL_PERCENT])
+    const ersCharge = Number(histSnap[TelemetryKeys.ERS_STATE_OF_CHARGE])
 
     let recommendedLap = currentLap + 3
     let reason = 'Normal degradation window'
@@ -76,7 +74,7 @@ export default function PerformanceEngineerPage() {
       currentLap,
       alternatives,
     })
-  }, [liveSnap])
+  }, [histSnap])
 
   useEffect(() => {
     if (
